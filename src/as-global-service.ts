@@ -7,6 +7,7 @@ global.services ??= new Map();
 
 /**
  * Creates a service and stores it in a global cache. Use this to persist data across hot reloads.
+ * Worked well until https://github.com/vercel/next.js/issues/52165, but now it's broken.
  * @param fn Function that returns a service.
  * @param key Unique key to store the service under.
  * @returns The service.
