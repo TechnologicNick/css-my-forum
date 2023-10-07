@@ -4,6 +4,7 @@ import { digestMessage } from "@/util";
 import { RefObject, useRef, useState } from "react";
 import type { LoginResponse } from "../api/user/login/route";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 // Header with dark and light mode, and a login button
 export const Header = () => {
@@ -14,6 +15,7 @@ export const Header = () => {
       <Link href="/" className="text-2xl font-bold">CSS-my-forum</Link>
       <div className="flex items-center gap-4">
         <button
+          id="login"
           className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md transition-colors"
           onClick={() => loginModalRef.current?.showModal()}
         >
@@ -28,6 +30,7 @@ export const Header = () => {
 const LoginModal = ({ dialogRef }: { dialogRef: RefObject<HTMLDialogElement> }) => {
   const [error, setError] = useState<string | null>(null);
   const [hash, setHash] = useState("");
+  const router = useRouter();
 
   return (
     <dialog ref={dialogRef} className="bg-transparent">
@@ -53,19 +56,25 @@ const LoginModal = ({ dialogRef }: { dialogRef: RefObject<HTMLDialogElement> }) 
             if (!res.ok) {
               try {
                 json = (await res.json()) as LoginResponse;
+                console.log(json)
               } catch (e) {
                 throw new Error(res.statusText);
               }
+            }
 
-              if ("error" in json) {
-                throw new Error(`${json.error}`);
-              }
+            json ??= (await res.json()) as LoginResponse;
+            if ("error" in json) {
+              throw new Error(`${json.error}`);
             }
 
             setError(null);
-            console.log(json);
+            console.log("Received session", json.session);
+            document.cookie = `session=${json.session};path=/`;
+
             (e.target as HTMLFormElement).reset();
             dialogRef.current?.close();
+            
+            router.push(`/flag`);
           } catch (e) {
             console.error(e);
             if (e instanceof Error) {

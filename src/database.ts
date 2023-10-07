@@ -81,11 +81,14 @@ export const sessionCache = asGlobalService(
 export const createSession = (user: User) => {
   const id = randomUUID();
   sessionCache.set(id, user);
+
+  console.log(`Created session for ${user.name}`, { session: id });
+
   return id;
 };
 
 export type Session = ReturnType<typeof createSession>;
 
-export const getSession = (id: string) => {
-  return sessionCache.get<Session>(id);
+export const getUserBySession = (id: string) => {
+  return sessionCache.get<User>(id);
 };
