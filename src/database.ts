@@ -52,11 +52,13 @@ export const users: User[] = asGlobalService(() => {
 
 export const admin = asGlobalService(async () => {
   let adminPassword = randomBytes(16).toString("hex");
-  if (fs.existsSync("admin-password.txt")) {
-    adminPassword = fs.readFileSync("admin-password.txt", "utf-8");
-  } else {
-    console.log("Admin password file not found, creating one");
-    fs.writeFileSync("admin-password.txt", adminPassword);
+  if (process.env.NODE_ENV === "development") {
+    if (fs.existsSync("admin-password.txt")) {
+      adminPassword = fs.readFileSync("admin-password.txt", "utf-8");
+    } else {
+      console.log("Admin password file not found, creating one");
+      fs.writeFileSync("admin-password.txt", adminPassword);
+    }
   }
 
   const adminUser = await createUser("admin", adminPassword);
