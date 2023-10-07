@@ -1,8 +1,8 @@
 import { randomBytes, randomUUID } from "crypto";
 import NodeCache from "node-cache";
 import asGlobalService from "./as-global-service";
-import { digestMessage } from "./util";
 import fs from "fs";
+import { sha256 } from "js-sha256";
 
 if (typeof window !== "undefined") {
   throw new Error("This module is only for server-side use");
@@ -38,8 +38,8 @@ export type User = {
   isAdmin: boolean;
 };
 
-export const createUser = async (name: string, password: string) => {
-  const hash = await digestMessage(password);
+export const createUser = (name: string, password: string) => {
+  const hash = sha256(password);
   const user = { name, password, hash, isAdmin: false };
 
   users.push(user);

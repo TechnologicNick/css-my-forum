@@ -1,10 +1,10 @@
 "use client";
 
-import { digestMessage } from "@/util";
 import { RefObject, useRef, useState } from "react";
 import type { LoginResponse } from "../api/user/login/route";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { sha256 } from "js-sha256";
 
 // Header with dark and light mode, and a login button
 export const Header = () => {
@@ -103,8 +103,8 @@ const LoginModal = ({ dialogRef }: { dialogRef: RefObject<HTMLDialogElement> }) 
           type="password"
           id="password"
           className="border border-gray-300 rounded-md p-2 bg-transparent mb-4 w-full dark:border-neutral-700"
-          onChange={async (e) => {
-            const hash = await digestMessage(e.target.value);
+          onChange={(e) => {
+            const hash = sha256(e.target.value);
             setHash(hash);
           }}
         />
