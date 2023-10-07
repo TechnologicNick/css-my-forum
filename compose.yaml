@@ -1,0 +1,9 @@
+version: "3"
+
+services:
+  nextjs:
+    build: .
+    environment:
+      - FLAG=TUDCTF{staging}
+    ports:
+      - "3000:3000"

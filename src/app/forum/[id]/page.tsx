@@ -4,7 +4,7 @@ import Image, { StaticImageData } from "next/image";
 
 import drool from "../../../../public/media/drool.jpg";
 import sus from "../../../../public/media/sus.png";
-import always_has_been from "../../../../public/media/always_has_been.png";
+import always_has_been from "../../../../public/media/always_has_been_amongus.png";
 
 export default function ForumPage({ params }: { params: { id: string } }) {
   const forum = getForum(params.id);
